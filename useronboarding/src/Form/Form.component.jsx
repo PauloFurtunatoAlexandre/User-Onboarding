@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as yup from "yup";
+import axios from "axios";
 
 const Form = () => {
   const [formState, setFormState] = useState({
@@ -15,6 +16,8 @@ const Form = () => {
     password: "",
     terms: true,
   });
+
+  const [posts, setPosts] = useState();
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
@@ -64,8 +67,24 @@ const Form = () => {
       });
   }
 
+  const formSubmit = event => {
+    axios
+      .post("https://reqres.in/api/users", formState)
+      .then(response => {
+        console.log(response);
+        setPosts(response.data);
+        setFormState({
+          name: "",
+          email: "",
+          password: "",
+          terms: true,
+        });
+      })
+      .catch(err => console.log(err));
+  }
+
   return(
-    <form>
+    <form onSubmit={formSubmit}>
       <label htmlFor="name">
         Name
         <input 
