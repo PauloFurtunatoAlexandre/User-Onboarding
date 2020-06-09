@@ -21,6 +21,8 @@ const Form = () => {
 
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
+  const [users, setUsers] = useState([]);
+
   let passwordValidator = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
   
   let schema = yup.object().shape({
@@ -66,6 +68,19 @@ const Form = () => {
         });
       });
   }
+
+  const getAllUsers = event => {
+    axios
+      .get("https://reqres.in/api/users", users)
+      .then(response => {
+        setUsers(response.data);
+      })
+      .catch(err => console.log(err));
+  }
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
 
   const formSubmit = event => {
     axios
@@ -126,6 +141,7 @@ const Form = () => {
         Terms and conditions
       </label>
       <button type="submit" disabled={buttonDisabled}>Submit New Member</button>
+      <pre>{JSON.stringify(users.data, null, 6)}</pre>
     </form>
   );
 }
