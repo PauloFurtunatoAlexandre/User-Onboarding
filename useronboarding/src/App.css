@@ -51,8 +51,7 @@ html {
 form {
   display: flex;
   flex-direction: column;
-  width: 90%;
-  max-width: 300px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -142,4 +141,20 @@ button:disabled {
   width: 15px;
   display: inline-block;
   margin-right: 5px;
+}
+
+.user-list {
+  padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.users {
+  background: #eee;
+  padding: 20px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  width: 200px;
+  margin: 12px auto;
 }

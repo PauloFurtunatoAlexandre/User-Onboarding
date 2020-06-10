@@ -4,14 +4,14 @@ import axios from "axios";
 
 const Form = () => {
   const [formState, setFormState] = useState({
-    name: "",
+    first_name: "",
     email: "",
     password: "",
     terms: true,
   });
 
   const [errors, setErrors] = useState({
-    name: "",
+    first_name: "",
     email: "",
     password: "",
     terms: true,
@@ -25,18 +25,18 @@ const Form = () => {
 
   let passwordValidator = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
   
-  let schema = yup.object().shape({
-    name: yup.string().required("Name is required"),
+  let formSchema = yup.object().shape({
+    first_name: yup.string().required("Name is required"),
     email: yup.string().email("Email format is necessary").required("Email is required"),
     password: yup.string().matches(passwordValidator).required("Password is required"),
     terms: yup.boolean().oneOf([true]),
   });
 
   useEffect(() => {
-    schema.isValid(formState).then(isFormValid => {
+    formSchema.isValid(formState).then(isFormValid => {
       setButtonDisabled(!isFormValid);
     });
-  }, [formState, schema]);
+  }, [formState, formSchema]);
 
   const inputChange = event => {
     event.persist();
@@ -53,7 +53,7 @@ const Form = () => {
 
   const validateChange = event => {
     yup
-      .reach(schema, event.target.name)
+      .reach(formSchema, event.target.name)
       .validate(event.target.value)
       .then(inputIsValid => {
         setErrors({
@@ -71,9 +71,9 @@ const Form = () => {
 
   const getAllUsers = event => {
     axios
-      .get("https://reqres.in/api/users", users)
+      .get("https://reqres.in/api/users")
       .then(response => {
-        setUsers(response.data);
+        setUsers(response.data.data);
       })
       .catch(err => console.log(err));
   }
@@ -83,13 +83,15 @@ const Form = () => {
   }, []);
 
   const formSubmit = event => {
+    event.preventDefault();
+    console.log({formState});
     axios
       .post("https://reqres.in/api/users", formState)
       .then(response => {
         console.log(response);
         setPosts(response.data);
         setFormState({
-          name: "",
+          first_name: "",
           email: "",
           password: "",
           terms: true,
@@ -100,15 +102,15 @@ const Form = () => {
 
   return(
     <form onSubmit={formSubmit}>
-      <label htmlFor="name">
+      <label htmlFor="first_name">
         Name
         <input 
           type="text"
-          name="name"
-          value={formState.name}
+          name="first_name"
+          value={formState.first_name}
           onChange={inputChange}
         />
-        { errors.name.length > 0 ? <p className="error">Please, type your name.</p> : null }
+        { errors.first_name.length > 0 ? <p className="error">Please, type your name.</p> : null }
       </label>
       <label htmlFor="email">
         Email
@@ -141,7 +143,17 @@ const Form = () => {
         Terms and conditions
       </label>
       <button type="submit" disabled={buttonDisabled}>Submit New Member</button>
-      <pre>{JSON.stringify(users.data, null, 6)}</pre>
+      <pre>{JSON.stringify(posts, null, 2)}</pre>
+      <div className="user-list">
+      {users.map(user => {
+        return(
+          <div className="users">
+            <h2>{user.first_name}</h2>
+            <p>{user.email}</p>
+          </div>
+        );
+      })}
+      </div>
     </form>
   );
 }
