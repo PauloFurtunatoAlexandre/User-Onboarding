@@ -109,6 +109,7 @@ const Form = () => {
           name="first_name"
           value={formState.first_name}
           onChange={inputChange}
+          data-cy="first_name"
         />
         { errors.first_name.length > 0 ? <p className="error">Please, type your name.</p> : null }
       </label>
@@ -119,6 +120,7 @@ const Form = () => {
           name="email"
           value={formState.email}
           onChange={inputChange}
+          data-cy="email"
         />
         { errors.email.length > 0 ? <p className="error">Please, type your email.</p> : null }
       </label>
@@ -129,6 +131,7 @@ const Form = () => {
           name="password"
           value={formState.password}
           onChange={inputChange}
+          data-cy="password"
         />
         { errors.password.length > 8 ? <p className="error">Minimum eight characters, at least one letter, one number and one special character.</p> : null }
       </label>
@@ -142,7 +145,7 @@ const Form = () => {
         />
         Terms and conditions
       </label>
-      <button type="submit" disabled={buttonDisabled}>Submit New Member</button>
+      <button data-cy="submit" type="submit" disabled={buttonDisabled}>Submit New Member</button>
       <pre>{JSON.stringify(posts, null, 2)}</pre>
       <div className="user-list">
       {users.map(user => {
